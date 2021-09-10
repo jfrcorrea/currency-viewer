@@ -1,0 +1,4 @@
+requests
+redis
+mysql.connector
+plotly

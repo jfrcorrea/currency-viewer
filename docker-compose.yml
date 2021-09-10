@@ -1,0 +1,41 @@
+version: "3"
+services:
+  app:
+    build: .
+    depends_on:
+      - redis
+      - mysql
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    expose:
+      - "6379"
+
+  mysql:
+    image: "mysql:5.7"
+    environment:
+      MYSQL_DATABASE: "db"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "password"
+      MYSQL_ROOT_PASSWORD: "password"
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+
+  datascience-notebook:
+    build: ./jupyter
+    volumes:
+      - "./jupyter:/home/jovyan/work"
+      - "./jupyter/.jupyter:/home/jovyan/.jupyter"
+    ports:
+      - "8888:8888"
+    container_name: datascience-notebook-container
+    depends_on:
+      - redis
+      - mysql
+      - app

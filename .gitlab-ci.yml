@@ -1,0 +1,19 @@
+services:
+  - redis:alpine
+  - mysql:5.7
+
+variables:
+  MYSQL_DATABASE: "db"
+  MYSQL_USER: "user"
+  MYSQL_PASSWORD: "password"
+  MYSQL_ROOT_PASSWORD: "password"
+  
+stages:
+  - test
+
+test:
+  stage: test
+  image: python:3-alpine
+  script:
+  - pip3 install -r requirements.txt
+  - /bin/sh run_unit_tests.sh
